@@ -61,7 +61,6 @@ const styles = StyleSheet.create({
     paddingRight: 25,
   },
   largeText: {
-    color: '#333',
     fontSize: 24,
     fontWeight: '600',
     textAlign: 'center',
