@@ -4,7 +4,8 @@ import { createDrawerNavigator } from '@react-navigation/drawer';
 import { NavigationContainer } from '@react-navigation/native';
 import SettingsPage from './src/components/pages/SettingsPage';
 import HomeStackNavigator from './src/navigation/HomeStackNavigator';
-import Icon from 'react-native-ionicons';
+import ProfilePage from './src/components/pages/ProfilePage';
+import NavBarContent from './src/components/NavBarContent';
 
 const Drawer = createDrawerNavigator();
 const styles = StyleSheet.create({
@@ -41,13 +42,22 @@ const CustomDrawerHeader = () => {
 export default function App() {
   return (
     <>
-      <StatusBar backgroundColor={'#fff'}/>
+      <StatusBar backgroundColor={'#333'}/>
       <NavigationContainer>
         <Drawer.Navigator initialRouteName="Home"
           screenOptions={{
-            drawerType: 'back',
-            headerStyle: styles.drawerHeader
-          }}>
+            drawerType: 'slide',
+            headerStyle: styles.drawerHeader,
+            drawerActiveTintColor: '#fc6b03'
+          }}
+          drawerContent={props => <NavBarContent {...props}/>}>
+            <Drawer.Screen name="Login" component={ProfilePage} 
+            options={{ 
+              title: 'Profil',
+              drawerIcon: ({ size }) => (
+                <Image source={require('./src/images/NavigationIcons/profileIcon.png')} style={{ width: size, height: size }}/>
+              ), 
+            }}/>
           <Drawer.Screen name="Home" component={HomeStackNavigator} 
             options={{ 
               title: 'Popularne modele',

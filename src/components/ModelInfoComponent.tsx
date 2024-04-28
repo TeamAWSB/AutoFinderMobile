@@ -7,7 +7,7 @@ function ModelInfo({ index, data, navigation }: { index:number, data:any, naviga
     <TouchableOpacity onPress={ () => navigation.navigate('CarDetails', { data })} activeOpacity={1}>
       <View style={styles.container}>
         <View style={styles.imgContainer}>
-          <Image style={styles.img} source={{ uri:data.urlImage }} alt='No photo'/>
+          <Image style={styles.img} source={{ uri:data.generations[0].urlImage }} alt='No photo'/>
         </View>
         <View style={styles.contentDetails}>
           <View style={styles.rowStyle}>
@@ -18,11 +18,12 @@ function ModelInfo({ index, data, navigation }: { index:number, data:any, naviga
             <Text style={styles.heading}>{ data.mark + ':' }</Text>
             <Text style={styles.heading}>{ data.model }</Text>
           </View>
-          <Text style={styles.heading}>{ data.year }</Text>
+          <Text style={styles.heading}> { data.class } </Text>
         </View>
 
         <View style={styles.contentDetails}>
-          <Text style={styles.heading}>{ data.class }</Text>
+          <Text style={styles.heading}>Generacje modelu</Text>
+          <Text style={styles.heading}>{ data.generations.length }</Text>
         </View>
       </View>
     </TouchableOpacity>

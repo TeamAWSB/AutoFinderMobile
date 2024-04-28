@@ -3,7 +3,7 @@ import { View, Text, StyleSheet } from 'react-native';
 
 function SettingsPage(){
     return (
-      <View>
+      <View style={{ backgroundColor: '#fff', height: '100%' }}>
         <Text style={styles.text}>strona ustawień</Text>
       </View>
     );
