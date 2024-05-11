@@ -1,7 +1,9 @@
+const server_address = 'http://192.168.8.187:5000/';
+
 export default class Api{
     static async Vehicles( marks:any, fuelTypes:any ): Promise<any[]>{
         try{
-            const response = await fetch('http://192.168.8.104:5000/vehicles',{
+            const response = await fetch(`${server_address}vehicles`,{
                 method: 'POST',
                 headers:{
                     Accept: 'application/json',
@@ -22,7 +24,7 @@ export default class Api{
 
     static async FuelTypes(): Promise<any[]>{
         try{
-            const response = await fetch('http://192.168.8.104:5000/fuelTypes');
+            const response = await fetch(`${server_address}fuelTypes`);
             const json = await response.json();
             return json;
         }
@@ -33,7 +35,7 @@ export default class Api{
 
     static async Marks(): Promise<any[]>{
         try{
-            const response = await fetch('http://192.168.8.104:5000/marks');
+            const response = await fetch(`${server_address}marks`);
             const json = await response.json();
             return json;
         }

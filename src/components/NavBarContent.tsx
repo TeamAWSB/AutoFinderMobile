@@ -1,21 +1,25 @@
 import { DrawerContentScrollView, DrawerItemList } from "@react-navigation/drawer";
 import React from "react";
-import { View, Text, Image, StyleSheet } from "react-native";
+import { View, Text, Image, StyleSheet, ImageBackground } from "react-native";
 
 export function NavBarContent(props:any){
     return(
-        <View style={{ flex: 1 }}>
+        <ImageBackground style={{ flex: 1 }} 
+                         source={require('../images/autoFinderNavBarBg.png')}
+                         resizeMode="cover">
             <View style={styles.bgProfileContainer}>
-                <Image style={styles.image} source={{ uri: 'https://i.pinimg.com/736x/27/b7/83/27b78322ff78d9514d1b61f37bfe55ac.jpg' }}/>
-                <Text style={{ color: '#333' }}>AdamVox_153</Text>
+                <View style={styles.imageContainer}>
+                    <Image style={styles.image} source={{ uri: 'https://static.hudl.com/users/prod/4120497_1c3e4a5dda88476393e66265b9bd1de5.jpg' }}/>
+                </View>
+                <Text style={{ color: '#fff', fontWeight: '500' }}>AdamVox_153</Text>
             </View>
             <DrawerContentScrollView {...props}>
                 <DrawerItemList {...props}/>
             </DrawerContentScrollView>
             <View style={styles.footer}>
-                <Text style={{ color: '#fff', textAlign: 'center', fontWeight: '500' }}>❤︎ Miłośnicy nauk wszelakich ❤︎</Text>
+                <Text style={{ color: '#fff', textAlign: 'center', fontWeight: '500' }}>❤︎ Studenci AWSB ❤︎</Text>
             </View>
-        </View>
+        </ImageBackground>
     );
 }
 
@@ -27,16 +31,26 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         height: 80,
         width: '90%',
-        paddingLeft: 15,
-        paddingRight: 15,
+        backgroundColor: '#ff2f00',
+        paddingLeft: 5,
+        paddingRight: 5,
         borderRadius: 10,
-        borderColor: '#fc6b03',
+        borderColor: '#ff2f00',
         borderWidth: 2,
         margin: '5%'
     },
+    imageContainer: {
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
+        height: 65,
+        width: 65,
+        borderRadius: 360,
+        backgroundColor: '#fff'
+    },
     image: {
-        height: 60,
-        width: 60,
+        height: '93%',
+        width: '93%',
         borderRadius: 360
     },
     footer:{
@@ -46,8 +60,8 @@ const styles = StyleSheet.create({
         height: 40,
         borderWidth: 1,
         borderRadius: 10,
-        borderColor: '#fc6b03',
-        backgroundColor: '#fc6b03',
+        borderColor: '#ff2f00',
+        backgroundColor: '#ff2f00',
         margin: 10
     }
 });

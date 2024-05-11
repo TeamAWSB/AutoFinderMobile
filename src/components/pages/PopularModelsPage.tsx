@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react';
 import { StyleSheet, SafeAreaView, ScrollView, Dimensions, RefreshControl, Text, View, TouchableOpacity, Button, ActivityIndicator } from 'react-native';
-import { popularModels } from '../../data/Example';
 import ModelInfo from '../ModelInfoComponent';
 import Api from '../../data/ApiRequests';
 import { MultiSelect } from 'react-native-element-dropdown';
@@ -174,7 +173,7 @@ const styles = StyleSheet.create({
   dropdown: {
     height: 50,
     backgroundColor: '#fff',
-    borderColor: '#333',
+    borderColor: '#ff2f00',
     borderWidth: 1,
     borderRadius: 12,
     padding: 12,
@@ -189,39 +188,41 @@ const styles = StyleSheet.create({
     color: '#333'
   },
   itemTextStyle: {
-    color: '#333'
+    color: '#333',
+    fontWeight: '400'
   },
   placeholderStyle: {
-    fontSize: 16,
-    fontStyle: 'italic',
-    color: '#333'
+    fontSize: 18,
+    fontWeight: '500',
+    color: '#ff2f00'
   },
   selectedTextStyle: {
     fontSize: 16,
-    fontWeight: '500',
+    fontWeight: '400',
     color: '#333'
   },
   iconStyle: {
     width: 20,
     height: 20,
-    color: '#333'
+    color: '#ff2f00'
   },
   inputSearchStyle: {
     height: 40,
     fontSize: 16,
-    color: '#333'
+    color: '#ff2f00'
   },
   selectedStyle: {
     borderRadius: 12,
     borderWidth: 1,
-    color: '#333'
+    color: '#ff2f00'
   },
   containerDropdown: {
     height: 'auto',
     maxHeight: 250,
     width: '88%',
+    backgroundColor: '#fff',
     borderRadius: 10,
-    borderColor: '#333',
+    borderColor: '#ff2f00',
     borderWidth: 1,
     color: '#333',
     overflow: 'hidden'
@@ -231,13 +232,13 @@ const styles = StyleSheet.create({
     justifyContent: 'center', 
     alignItems: 'center',
     height: 40,
-    borderWidth: 2, 
-    borderColor: '#333', 
-    backgroundColor: '#333',
+    backgroundColor: '#ff2f00',
     borderRadius: 10, 
   },
   buttonText:{
-    color: '#fff'
+    color: '#fff',
+    fontSize: 18,
+    fontWeight: '500'
   }
 });
 

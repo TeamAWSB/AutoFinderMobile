@@ -4,8 +4,8 @@ import { createDrawerNavigator } from '@react-navigation/drawer';
 import { NavigationContainer } from '@react-navigation/native';
 import SettingsPage from './src/components/pages/SettingsPage';
 import HomeStackNavigator from './src/navigation/HomeStackNavigator';
-import ProfilePage from './src/components/pages/ProfilePage';
 import NavBarContent from './src/components/NavBarContent';
+import AccountNavPage from './src/components/pages/AccountNavPage';
 
 const Drawer = createDrawerNavigator();
 const styles = StyleSheet.create({
@@ -42,18 +42,20 @@ const CustomDrawerHeader = () => {
 export default function App() {
   return (
     <>
-      <StatusBar backgroundColor={'#333'}/>
+      <StatusBar backgroundColor={'#ff2f00'}/>
       <NavigationContainer>
         <Drawer.Navigator initialRouteName="Home"
           screenOptions={{
             drawerType: 'slide',
             headerStyle: styles.drawerHeader,
-            drawerActiveTintColor: '#fc6b03'
+            drawerActiveTintColor: '#ff2f00'
           }}
           drawerContent={props => <NavBarContent {...props}/>}>
-            <Drawer.Screen name="Login" component={ProfilePage} 
+            <Drawer.Screen name="Account" component={AccountNavPage} 
             options={{ 
-              title: 'Profil',
+              title: 'Konto',
+              headerTitle: () => null,
+              headerBackground: () => <CustomDrawerHeader/>,
               drawerIcon: ({ size }) => (
                 <Image source={require('./src/images/NavigationIcons/profileIcon.png')} style={{ width: size, height: size }}/>
               ), 
@@ -67,13 +69,18 @@ export default function App() {
                 <Image source={require('./src/images/NavigationIcons/popularIcon.png')} style={{ width: size, height: size }}/>
               ),
             }}/>
-          <Drawer.Screen name="Favorite" component={SettingsPage} 
-            options={{ 
+          {false && ( // Wyświetlenie opcji Ulubione tylko dla zalogowanych użytkowników
+          <Drawer.Screen
+            name="Favorite"
+            component={SettingsPage}
+            options={{
               title: 'Ulubione',
               drawerIcon: ({ size }) => (
                 <Image source={require('./src/images/NavigationIcons/favoriteIcon.png')} style={{ width: size, height: size }}/>
-              ), 
-            }}/>
+              ),
+            }}
+          />
+        )}
         </Drawer.Navigator>
       </NavigationContainer>
     </>
