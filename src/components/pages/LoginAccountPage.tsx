@@ -1,9 +1,24 @@
-import React from 'react';
-import { Dimensions, Image, ImageBackground, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
+import React, { useState } from 'react';
+import { Alert, Image, ImageBackground, StyleSheet, Text, TextInput, TouchableOpacity, View, ToastAndroid } from 'react-native';
+import Api from '../../data/ApiRequests';
 
 function LoginAccountPage({ navigation }: { navigation:any }){
+    const [email, setEmail] = useState('');
+    const [password, setPassword] = useState('');
+
     const GoToRegisterPage = () => {
         navigation.navigate('Register', {  });
+    };
+
+    const ToLogin = async () => {
+        const data = await Api.Login(email, password);
+
+        if(data?.error != null)
+            ToastAndroid.show(`niepoprawne dane:\n${data?.error}`, 2000);
+        else{
+            ToastAndroid.show(`Witaj ponownie!`, 2000);
+            navigation.navigate("Profile", { 'email': data?.email });
+        }
     };
 
     return (
@@ -13,14 +28,16 @@ function LoginAccountPage({ navigation }: { navigation:any }){
         <View style={styles.logoContainer}>
             <Image style={styles.logImg}
                    source={require('../../images/NavigationIcons/profileIcon.png')}/>
-            <Text style={styles.title}>Witaj w AutoFinder!</Text>
+            <Text style={styles.title}>Witaj ponownie!</Text>
         </View>
         <View style={styles.form}>
             <TextInput style={styles.textBox}
-                       placeholder='Login'/>
+                       placeholder='Login'
+                       onChangeText={email => setEmail(email)}/>
             <TextInput style={styles.textBox}
-                       placeholder='Hasło'/>
-            <TouchableOpacity style={styles.button}>
+                       placeholder='Hasło'
+                       onChangeText={password => setPassword(password)}/>
+            <TouchableOpacity style={styles.button} onPress={ToLogin}>
                 <Text style={styles.buttonText}>Zaloguj</Text>
             </TouchableOpacity>
             <TouchableOpacity style={{ marginTop: 10 }} onPress={GoToRegisterPage}>
@@ -36,7 +53,7 @@ const styles = StyleSheet.create({
         display: 'flex',
         justifyContent: 'flex-start',
         alignItems: 'center',
-        height: Dimensions.get('window').height,
+        height: '100%',
         width: '100%',
         backgroundColor: '#fff'
     },
@@ -44,7 +61,7 @@ const styles = StyleSheet.create({
         display: 'flex',
         justifyContent: 'center',
         alignItems: 'center',
-        marginTop: '10%',
+        marginTop: 80,
         height: 160,
         width: '80%'
     },
@@ -74,7 +91,8 @@ const styles = StyleSheet.create({
         fontSize: 18,
         fontWeight: '400',
         marginTop: 10,
-        marginBottom: 10
+        marginBottom: 10,
+        color: '#ff2f00'
     },
     button: {
         display: 'flex',

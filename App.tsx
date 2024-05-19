@@ -2,10 +2,10 @@ import * as React from 'react';
 import { StatusBar, StyleSheet, View, Image, Dimensions } from 'react-native';
 import { createDrawerNavigator } from '@react-navigation/drawer';
 import { NavigationContainer } from '@react-navigation/native';
-import SettingsPage from './src/components/pages/SettingsPage';
 import HomeStackNavigator from './src/navigation/HomeStackNavigator';
 import NavBarContent from './src/components/NavBarContent';
 import AccountNavPage from './src/components/pages/AccountNavPage';
+import FavoriteVehiclesNavPage from './src/components/pages/FavoriteVehicleNavPage';
 
 const Drawer = createDrawerNavigator();
 const styles = StyleSheet.create({
@@ -46,13 +46,13 @@ export default function App() {
       <NavigationContainer>
         <Drawer.Navigator initialRouteName="Home"
           screenOptions={{
-            drawerType: 'slide',
+            drawerType: 'back',
             headerStyle: styles.drawerHeader,
             drawerActiveTintColor: '#ff2f00'
           }}
           drawerContent={props => <NavBarContent {...props}/>}>
             <Drawer.Screen name="Account" component={AccountNavPage} 
-            options={{ 
+            options={{
               title: 'Konto',
               headerTitle: () => null,
               headerBackground: () => <CustomDrawerHeader/>,
@@ -62,19 +62,18 @@ export default function App() {
             }}/>
           <Drawer.Screen name="Home" component={HomeStackNavigator} 
             options={{ 
-              title: 'Popularne modele',
+              title: 'Popularne',
               headerTitle: () => null,
               headerBackground: () => <CustomDrawerHeader/>,
               drawerIcon: ({ size }) => (
                 <Image source={require('./src/images/NavigationIcons/popularIcon.png')} style={{ width: size, height: size }}/>
               ),
             }}/>
-          {false && ( // Wyświetlenie opcji Ulubione tylko dla zalogowanych użytkowników
-          <Drawer.Screen
-            name="Favorite"
-            component={SettingsPage}
+          {true && ( // Wyświetlenie opcji Ulubione tylko dla zalogowanych użytkowników
+          <Drawer.Screen name="Favorite" component={FavoriteVehiclesNavPage}
             options={{
-              title: 'Ulubione',
+              title: 'Polubione',
+              headerStyle: { alignSelf: 'center', width: '100%' },
               drawerIcon: ({ size }) => (
                 <Image source={require('./src/images/NavigationIcons/favoriteIcon.png')} style={{ width: size, height: size }}/>
               ),

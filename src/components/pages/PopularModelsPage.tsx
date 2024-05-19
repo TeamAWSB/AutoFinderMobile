@@ -34,7 +34,6 @@ function PopularModelsPage({ navigation }: { navigation:any }) {
     catch(error){
       console.error(error);
     }
-    
   };
 
   const [selectedMark, setSelectedMark] = useState<string[]>([]);

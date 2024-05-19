@@ -1,12 +1,33 @@
-import React from 'react';
-import { View, Text, StyleSheet, Image } from 'react-native';
+import React, { useEffect, useState } from 'react';
+import { View, Text, StyleSheet, Image, ToastAndroid, Alert, BackHandler } from 'react-native';
+import Api from '../../data/ApiRequests';
+import UserData from '../../data/Interfaces/UserData';
 
-function ProfilePage(){
+function ProfilePage( { navigation }: { navigation:any } ){
+    const [user, setUser] = useState<any>({ });
+
+    useEffect(() => {
+        const fetchData = async () => {
+            try {
+                const user = await Api.GetUserData('test@gmail.com');
+
+                if(user && user.name)
+                    setUser(user);
+                else
+                    setUser('Brak maila!');
+            } catch (error) {
+                console.error('Błąd podczas pobierania danych:', error);
+            }
+        };
+        fetchData();
+        
+    }, []);
+
     return (
       <View style={styles.container}>
         <View style={styles.avatar}>
             <Image style={styles.image} source={require('../../images/NavigationIcons/profileIcon.png')}/>
-            <Text style={styles.text}>Nazwa konta</Text>
+            <Text style={styles.text}> { user?.name } { user?.surname } </Text>
         </View>
         
         

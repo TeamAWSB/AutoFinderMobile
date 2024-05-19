@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, StyleSheet, Image, Dimensions } from 'react-native';
+import { View, Text, StyleSheet, Image, Dimensions, SafeAreaView, ScrollView } from 'react-native';
 import { useRoute } from '@react-navigation/native';
 import { Dropdown } from 'react-native-element-dropdown';
 
@@ -9,7 +9,7 @@ function ModelInfoPage({ navigation }: { navigation:any } ) {
     const data: any = route.params?.data;
 
     useEffect(() => {
-      if (data.generations.length > 0) {
+      if (data.generations && data.generations.length > 0) {
         setValue(data.generations[0]);
       }
     }, [data]);
@@ -31,47 +31,50 @@ function ModelInfoPage({ navigation }: { navigation:any } ) {
     
     const [value, setValue] = useState(generations()[0]);
     return (
-      <View style={styles.page}>
-        <View style={styles.imgContainer}>
-          <Image style={styles.img} source={{ uri: value?.urlImage }}/>
-          <View style={styles.inlineElementHorizontal}>
-            <Text style={styles.largeText}>{ data.mark } { data.model }</Text>
-            <Text style={styles.mediumText}>{ value?.generation } </Text>
+      <SafeAreaView>
+        <ScrollView style={{ backgroundColor: '#fff', minHeight: '100%' }}>
+          <View style={styles.page}>
+            <View style={styles.imgContainer}>
+              <Image style={styles.img} source={{ uri: value?.urlImage }}/>
+              <View style={styles.inlineElementHorizontal}>
+                <Text style={styles.largeText}>{ data.mark } { data.model }</Text>
+                <Text style={styles.mediumText}>{ value?.generation } </Text>
+              </View>
+            </View>
+            <Dropdown
+              style={styles.dropdown}
+              placeholderStyle={styles.placeholderStyle}
+              selectedTextStyle={styles.selectedTextStyle}
+              inputSearchStyle={styles.inputSearchStyle}
+              iconStyle={styles.iconStyle}
+              itemTextStyle={styles.itemTextStyle}
+              data={generations()}
+              search
+              maxHeight={300}
+              labelField="name"
+              valueField="id"
+              placeholder="Wybierz generacje"
+              searchPlaceholder="Wyszukiwanie"
+              value={value}
+              onChange={item => {
+                setValue(item.data);
+              }}
+          />
+            <View style={styles.inlineElement}>
+              <Text style={styles.boldText}>{ value?.fuelType } • { data.class } • { value?.engineGeneration } { value?.horsepower }KM • { value?.transmissionType }</Text>
+            </View>
+            <View style={styles.inlineElement}>
+              <Text style={styles.smallText}>{ data.description }</Text>
+            </View>
           </View>
-        </View>
-        <Dropdown
-          style={styles.dropdown}
-          placeholderStyle={styles.placeholderStyle}
-          selectedTextStyle={styles.selectedTextStyle}
-          inputSearchStyle={styles.inputSearchStyle}
-          iconStyle={styles.iconStyle}
-          itemTextStyle={styles.itemTextStyle}
-          data={generations()}
-          search
-          maxHeight={300}
-          labelField="name"
-          valueField="id"
-          placeholder="Wybierz generacje"
-          searchPlaceholder="Wyszukiwanie"
-          value={value}
-          onChange={item => {
-            setValue(item.data);
-          }}
-      />
-        <View style={styles.inlineElement}>
-          <Text style={styles.boldText}>{ value?.fuelType } • { data.class } • { value?.engineGeneration } { value?.horsepower }KM • { value?.transmissionType }</Text>
-        </View>
-        <View style={styles.inlineElement}>
-          <Text style={styles.smallText}>{ data.description }</Text>
-        </View>
-      </View>
+        </ScrollView>
+      </SafeAreaView>
     );
 };
 
 const styles = StyleSheet.create({
   page: {
-    backgroundColor: '#fff',
-    height: '100%',
+    height: 'auto',
     display: 'flex',
     justifyContent: 'flex-start',
     alignItems: 'center'
