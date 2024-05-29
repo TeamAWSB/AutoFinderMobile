@@ -2,6 +2,7 @@ import { createStackNavigator } from '@react-navigation/stack';
 import ProfilePage from '../pages/ProfilePage';
 import LoginAccountPage from '../pages/LoginAccountPage';
 import RegisterAccountPage from './RegisterAccountPage';
+import { useEffect } from 'react';
 
 const Stack = createStackNavigator();
 

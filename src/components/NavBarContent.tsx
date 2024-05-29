@@ -1,8 +1,31 @@
-import { DrawerContentScrollView, DrawerItemList } from "@react-navigation/drawer";
-import React from "react";
-import { View, Text, Image, StyleSheet, ImageBackground } from "react-native";
+import { DrawerContentScrollView, DrawerItemList, useDrawerStatus } from "@react-navigation/drawer";
+import React, { useEffect, useState } from "react";
+import { View, Text, Image, StyleSheet, ImageBackground, ToastAndroid } from "react-native";
+import SessionApp from "../data/storage/SessionApp";
 
 export function NavBarContent(props:any){
+    const[username, setUsername] = useState<string>('');
+    const isDrawerOpen = useDrawerStatus() === 'open';
+
+    useEffect(() => {
+        const initializeUserData = async () => {
+          try {
+            if (isDrawerOpen) {
+                var user = await SessionApp.Get();
+
+                if(user?.login.length > 0 && user?.login != undefined)
+                    setUsername(user?.login);
+                else
+                    setUsername('Nie zalogowany');
+            } 
+          } catch (error) {
+            console.error('Error creating user data:', error);
+          }
+        };
+    
+        initializeUserData();
+      }, [isDrawerOpen]);
+
     return(
         <ImageBackground style={{ flex: 1 }} 
                          source={require('../images/autoFinderNavBarBg.png')}
@@ -11,7 +34,7 @@ export function NavBarContent(props:any){
                 <View style={styles.imageContainer}>
                     <Image style={styles.image} source={{ uri: 'https://static.hudl.com/users/prod/4120497_1c3e4a5dda88476393e66265b9bd1de5.jpg' }}/>
                 </View>
-                <Text style={{ color: '#fff', fontWeight: '500' }}>AdamVox_153</Text>
+                <Text style={{ color: '#fff', fontWeight: '500' }}>{ username }</Text>
             </View>
             <DrawerContentScrollView {...props}>
                 <DrawerItemList {...props}/>

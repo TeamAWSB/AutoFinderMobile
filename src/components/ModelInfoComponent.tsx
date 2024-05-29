@@ -1,5 +1,5 @@
-import React from 'react';
-import { View, Text, StyleSheet, Image, Dimensions, TouchableOpacity } from 'react-native';
+import React, { useEffect, useState } from 'react';
+import { View, Text, StyleSheet, Image, Dimensions, TouchableOpacity, Button, ToastAndroid } from 'react-native';
 import { Int32 } from 'react-native/Libraries/Types/CodegenTypes';
 
 function ModelInfo({ index, data, navigation }: { index:number, data:any, navigation:any }){
@@ -22,8 +22,10 @@ function ModelInfo({ index, data, navigation }: { index:number, data:any, naviga
         </View>
 
         <View style={styles.contentDetails}>
-          <Text style={styles.heading}>Generacje modelu</Text>
-          <Text style={styles.heading}>{ data.generations.length }</Text>
+          <View style={{ display: 'flex', flexDirection: 'row' }}>
+            <Text style={styles.heading}>Generacje </Text>
+            <Text style={styles.heading}>{ data.generations.length }</Text>
+          </View>
         </View>
       </View>
     </TouchableOpacity>
@@ -34,7 +36,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     width: Dimensions.get('window').width - 30,
-    height: 300,
+    minHeight: 300,
     backgroundColor: "#fff",
     margin:10,
     borderRadius: 15,
@@ -47,6 +49,19 @@ const styles = StyleSheet.create({
     shadowRadius: 20,
     elevation: 5,
     overflow: 'hidden'
+  },
+  generationContainer: {
+    display: 'flex',
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    height: 30,
+    marginLeft: 5,
+    marginRight: 5,
+    marginTop: 2,
+    marginBottom: 2,
+    paddingLeft: 4,
+    paddingRight: 4
   },
   rowStyle: {
     display: 'flex',
@@ -65,7 +80,7 @@ const styles = StyleSheet.create({
   },
   imgContainer: {
     flex:1,
-    maxHeight: 200,
+    minHeight: 200,
     padding: 20,
     width: Dimensions.get('window').width - 34,
     alignSelf: "stretch",

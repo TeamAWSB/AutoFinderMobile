@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
-import { Alert, Image, ImageBackground, StyleSheet, Text, TextInput, TouchableOpacity, View, ToastAndroid } from 'react-native';
+import { Image, ImageBackground, StyleSheet, Text, TextInput, TouchableOpacity, View, ToastAndroid, Alert } from 'react-native';
 import Api from '../../data/ApiRequests';
+import SessionApp from '../../data/storage/SessionApp';
+import CryptoJS from 'crypto-js';
 
 function LoginAccountPage({ navigation }: { navigation:any }){
     const [email, setEmail] = useState('');
@@ -10,12 +12,16 @@ function LoginAccountPage({ navigation }: { navigation:any }){
         navigation.navigate('Register', {  });
     };
 
-    const ToLogin = async () => {
-        const data = await Api.Login(email, password);
+    const ToLogin = async ( fromStorage:boolean ) => {
+        const encryptedPassword = fromStorage ? password : CryptoJS.SHA256(password).toString();
+        //@ts-ignore
+        const data = await Api.Login(email, encryptedPassword);
 
-        if(data?.error != null)
-            ToastAndroid.show(`niepoprawne dane:\n${data?.error}`, 2000);
+        if(data?.error != null || data?.email.length == 0)
+            Alert.alert('Informacja', `Nie udało się zalogować`);
         else{
+            //@ts-ignore
+            await SessionApp.Set(data.id, email, encryptedPassword)
             ToastAndroid.show(`Witaj ponownie!`, 2000);
             navigation.navigate("Profile", { 'email': data?.email });
         }
@@ -37,7 +43,7 @@ function LoginAccountPage({ navigation }: { navigation:any }){
             <TextInput style={styles.textBox}
                        placeholder='Hasło'
                        onChangeText={password => setPassword(password)}/>
-            <TouchableOpacity style={styles.button} onPress={ToLogin}>
+            <TouchableOpacity style={styles.button} onPress={() => ToLogin(false)}>
                 <Text style={styles.buttonText}>Zaloguj</Text>
             </TouchableOpacity>
             <TouchableOpacity style={{ marginTop: 10 }} onPress={GoToRegisterPage}>

@@ -1,22 +1,19 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, StyleSheet, Image, Dimensions, SafeAreaView, ScrollView } from 'react-native';
+import { View, Text, StyleSheet, Image, Dimensions, SafeAreaView, ScrollView, TouchableOpacity, ToastAndroid } from 'react-native';
 import { useRoute } from '@react-navigation/native';
 import { Dropdown } from 'react-native-element-dropdown';
+import Api from '../../data/ApiRequests';
+import SessionApp from '../../data/storage/SessionApp';
 
 function ModelInfoPage({ navigation }: { navigation:any } ) {
     const route = useRoute();
+    const [like, setLike] = useState<boolean>(false); 
+
     //@ts-ignore
     const data: any = route.params?.data;
 
-    useEffect(() => {
-      if (data.generations && data.generations.length > 0) {
-        setValue(data.generations[0]);
-      }
-    }, [data]);
-
-    const generations = () =>{
+    const generations = () => {
       let generations = new Array();
-      
       for(let index in data.generations){
         const item = data.generations[index];
         generations.push({
@@ -25,20 +22,59 @@ function ModelInfoPage({ navigation }: { navigation:any } ) {
           data: item
         });
       }
-
       return generations;
     };
-    
-    const [value, setValue] = useState(generations()[0]);
+
+    const [value, setValue] = useState<any>(null); 
+
+    useEffect(() => {
+      if (data.generations && data.generations.length > 0) {
+        const initialGeneration = generations()[0];
+        setValue(initialGeneration.id); 
+        handleDropChange(initialGeneration);
+      }
+    }, [data]);
+
+    const getStatusLikeCurrentGenerationModel = async (model:any) => {
+      let user = await SessionApp.Get();
+      console.warn(user.login);
+
+      const likedVehicles: any[] = await Api.GetLikedVehicles(user?.userId);
+
+      for(let index = 0; index < likedVehicles.length; index++){
+        if(likedVehicles[index].id == model.vehicleId && likedVehicles[index].generations[0].generation == model.generation){
+          setLike(true);
+          return;
+        }
+      }
+      setLike(false);
+    };
+
+    const handleClickLike = async () => {
+      let user = await SessionApp.Get();
+
+      if(user?.userId != 0 && user != undefined){
+        const success = await Api.SetLikeVehicle(user.userId, data.generations[value].vehicleId, !like);
+        
+        if(success)
+          setLike(!like);
+      }
+    };
+
+    const handleDropChange = (item:any) => {
+      setValue(item.id);
+      getStatusLikeCurrentGenerationModel(item.data);
+    };
+
     return (
       <SafeAreaView>
         <ScrollView style={{ backgroundColor: '#fff', minHeight: '100%' }}>
           <View style={styles.page}>
             <View style={styles.imgContainer}>
-              <Image style={styles.img} source={{ uri: value?.urlImage }}/>
+              <Image style={styles.img} source={{ uri: data.generations[value]?.urlImage }}/>
               <View style={styles.inlineElementHorizontal}>
                 <Text style={styles.largeText}>{ data.mark } { data.model }</Text>
-                <Text style={styles.mediumText}>{ value?.generation } </Text>
+                <Text style={styles.mediumText}>{ data.generations[value]?.generation } </Text>
               </View>
             </View>
             <Dropdown
@@ -56,12 +92,18 @@ function ModelInfoPage({ navigation }: { navigation:any } ) {
               placeholder="Wybierz generacje"
               searchPlaceholder="Wyszukiwanie"
               value={value}
-              onChange={item => {
-                setValue(item.data);
-              }}
+              onChange={handleDropChange}
           />
+          <View style={[styles.inlineElementHorizontal, { width: '100%' }]}>
+            <Text style={[styles.boldText, { color: '#ff2f00' }]}>{like ? "Polubiono pojazd" : "Polub pojazd"}</Text>
+            <TouchableOpacity onPress={handleClickLike}>
+                  <Image style={{ width: 35, height: 35 }} source={like ? require('../../images/NavigationIcons/favoriteFilledIcon.png') :
+                    require('../../images/NavigationIcons/favoriteIcon.png')
+                  }/>
+            </TouchableOpacity>
+          </View>
             <View style={styles.inlineElement}>
-              <Text style={styles.boldText}>{ value?.fuelType } • { data.class } • { value?.engineGeneration } { value?.horsepower }KM • { value?.transmissionType }</Text>
+              <Text style={styles.boldText}>{ data.generations[value]?.fuelType } • { data.class } • { data.generations[value]?.engineGeneration } { data.generations[value]?.horsepower }KM • { data.generations[value]?.transmissionType }</Text>
             </View>
             <View style={styles.inlineElement}>
               <Text style={styles.smallText}>{ data.description }</Text>
@@ -82,7 +124,7 @@ const styles = StyleSheet.create({
   imgContainer: {
     borderRadius: 10,
     paddingBottom: -5,
-    backgroundColor: '#ed7428',
+    backgroundColor: '#ff2f00',
     overflow: 'hidden'
   },
   img: {
@@ -104,6 +146,7 @@ const styles = StyleSheet.create({
     display: 'flex',
     flexDirection: 'row',
     justifyContent: 'space-between',
+    alignItems: 'center',
     height: 'auto',
     paddingLeft: 25,
     paddingRight: 25,

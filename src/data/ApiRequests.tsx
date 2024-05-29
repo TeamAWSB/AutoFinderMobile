@@ -70,8 +70,6 @@ export default class Api{
 
     static async Login( email:string, password:string): Promise<UserData | null>{
         try{
-            const encryptedPassword = CryptoJS.SHA256(password).toString();
-
             const response = await fetch(`${server_address}login`,{
                 method: 'POST',
                 headers:{
@@ -80,7 +78,7 @@ export default class Api{
                 },
                 body: JSON.stringify({
                     email: email,
-                    password: encryptedPassword
+                    password: password
                 })
             });
             const json:UserData = await response.json();
@@ -120,6 +118,32 @@ export default class Api{
                 return false;
         }
         catch{
+            return false;
+        }
+    }
+
+    static async SetLikeVehicle( userId:number, vehicleId:number, status:boolean ): Promise<boolean>{
+        try{
+            const response = await fetch(`${server_address}setLikeVehicle`,{
+                method: 'POST',
+                headers:{
+                    Accept: 'application/json',
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    vehicleId: vehicleId,
+                    userId: userId,
+                    status: status
+                })
+            });
+            const json = await response.json();
+
+            if(json.error == null)
+                return true;
+            else
+                return false;
+        }
+        catch(error){
             return false;
         }
     }

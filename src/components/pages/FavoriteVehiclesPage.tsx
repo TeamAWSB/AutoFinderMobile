@@ -1,7 +1,8 @@
 import React, { useCallback, useEffect, useState } from 'react';
-import { View, StyleSheet, SafeAreaView, ScrollView, ToastAndroid, RefreshControl } from 'react-native';
+import { View, StyleSheet, SafeAreaView, ScrollView, ToastAndroid, RefreshControl, TouchableOpacity, Text, Dimensions } from 'react-native';
 import Api from '../../data/ApiRequests';
 import SimpleModelInfo from '../SimpleModelInfoComponent';
+import SessionApp from '../../data/storage/SessionApp';
 
 function FavoriteVehiclesPage({ navigation }: { navigation:any }){
   const [data, setData] = useState<any[]>([]);
@@ -15,8 +16,13 @@ function FavoriteVehiclesPage({ navigation }: { navigation:any }){
 
   const fetchData = async () => {
     try{
-      const jsonData = await Api.GetLikedVehicles(78);
-      setData(jsonData);
+      var user = await SessionApp.Get();
+      var result = await Api.Login(user?.login, user?.password);
+
+      if(result != null && result.id != 0){
+        const jsonData = await Api.GetLikedVehicles(result.id);
+        setData(jsonData);
+      }
     }
     catch(error){
       console.error(error);
@@ -57,8 +63,12 @@ function FavoriteVehiclesPage({ navigation }: { navigation:any }){
                 <SimpleModelInfo key={index} data={e} navigation={navigation}/>
               );
             })
-          ) : (<View>
+          ) : (<View style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: Dimensions.get('window').height }}>
+                <Text style={{ color: '#ff2f00', fontSize: 18, margin: 20, textAlign: 'center' }}>Brak polubionych pojazdów. Możliwe, że jeszcze nic nie polubiłe(a)ś pojazdów bądź nie zalogowałeś się do serwisu</Text>
 
+                <TouchableOpacity style={styles.button} onPress={handleRefresh}>
+                  <Text style={styles.buttonText}>Odśwież dane</Text>
+                </TouchableOpacity>
           </View>)
         }
       </ScrollView>
@@ -69,6 +79,21 @@ function FavoriteVehiclesPage({ navigation }: { navigation:any }){
 const styles = StyleSheet.create({
   text: {
     color: "black"
+  },
+  button: {
+    display: 'flex',
+    justifyContent: 'center',
+    height: 45,
+    minWidth: '80%',
+    backgroundColor: '#ff2f00',
+    borderRadius: 10,
+    marginBottom: 15
+  },
+  buttonText: {
+      fontSize: 20,
+      fontWeight: '500',
+      textAlign: 'center',
+      color: '#fff'
   }
 });
 
