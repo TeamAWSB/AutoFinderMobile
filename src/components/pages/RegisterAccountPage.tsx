@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Image, ImageBackground, StyleSheet, Text, TextInput, ToastAndroid, TouchableOpacity, View } from 'react-native';
+import { Dimensions, Image, ImageBackground, SafeAreaView, ScrollView, StyleSheet, Text, TextInput, ToastAndroid, TouchableOpacity, View } from 'react-native';
 import Api from '../../data/ApiRequests';
 import { Dropdown } from 'react-native-element-dropdown';
 import Slider from '@react-native-community/slider';
@@ -34,6 +34,7 @@ function RegisterAccountPage({ navigation }: { navigation:any }){
             return;
         }
 
+        //@ts-ignore
         const data: UserData = {
             name: name,
             surname: surname,
@@ -66,70 +67,75 @@ function RegisterAccountPage({ navigation }: { navigation:any }){
       ];
 
     return(
-        <ImageBackground style={styles.body}
-                        source={require('../../images/autoFinderBg.png')}>
-            <View style={styles.logoContainer}>
-                <Image style={styles.logImg}
-                    source={require('../../images/NavigationIcons/profileIcon.png')}/>
-                <Text style={styles.title}>Odkryj możliwości AutoFindera!</Text>
-            </View>             
-            <View style={styles.form}>
-                <Dropdown
-                    style={dropdownStyle.dropdown}
-                    placeholderStyle={dropdownStyle.placeholderStyle}
-                    selectedTextStyle={dropdownStyle.selectedTextStyle}
-                    inputSearchStyle={dropdownStyle.inputSearchStyle}
-                    iconStyle={dropdownStyle.iconStyle}
-                    containerStyle={dropdownStyle.containerDropdown}
-                    data={data}
-                    search
-                    maxHeight={300}
-                    labelField="label"
-                    valueField="value"
-                    placeholder="Narodowość"
-                    searchPlaceholder="Szukaj..."
-                    value={country}
-                    onChange={item => {
-                        setCountry(item);
-                    }}
-                />
-                <TextInput style={styles.textBox}
-                        placeholder='Imię'
-                        onChangeText={value => setName(value)}/>
-                <TextInput style={styles.textBox}
-                        placeholder='Nazwisko'
-                        onChangeText={value => setSurname(value)}/>
-                <TextInput style={styles.textBox}
-                        placeholder='Email'
-                        onChangeText={value => setEmail(value)}/>
-                <TextInput style={styles.textBox}
-                        placeholder='Hasło'
-                        onChangeText={value => setPassword1(value)}/>
-                <TextInput style={styles.textBox}
-                        placeholder='Powtórz hasło'
-                        onChangeText={value => setPassword2(value)}/>
-                <View style={styles.sliderView}>
-                    <Text style={{ fontSize: 18, fontWeight: '400' }}>Rok urodzenia <Text style={{ fontWeight: '600', color:'#ff2f00' }}>{birthOfYear}</Text></Text>
-                    <Slider
-                        style={{width: '100%', height: 40}}
-                        onValueChange={year => setBirthOfYear(year)}
-                        value={birthOfYear}
-                        step={1}
-                        minimumValue={new Date().getFullYear() - 100}
-                        maximumValue={new Date().getFullYear()}
-                        minimumTrackTintColor="#ff2f00"
-                        maximumTrackTintColor="#000000"
-                        thumbImage={require('../../images/thumbSlider.png')}
-                    />
-                </View>
-                <TouchableOpacity style={styles.button} onPress={Register}>
-                    <Text style={styles.buttonText}>Zarejestruj</Text>
-                </TouchableOpacity>
-                <TouchableOpacity style={{ marginTop: 10 }} onPress={GoToLoginPage}>
-                    <Text style={styles.link}>Mam już konto</Text>
-                </TouchableOpacity>
-            </View>
-        </ImageBackground>
+        <SafeAreaView>
+            <ScrollView>
+                <ImageBackground style={styles.body}
+                                source={require('../../images/autoFinderBg.png')}>
+                    <View style={styles.logoContainer}>
+                        <Image style={styles.logImg}
+                            source={require('../../images/NavigationIcons/profileIcon.png')}/>
+                        <Text style={styles.title}>Odkryj możliwości AutoFindera!</Text>
+                    </View>             
+                    <View style={styles.form}>
+                        <Dropdown
+                            style={dropdownStyle.dropdown}
+                            placeholderStyle={dropdownStyle.placeholderStyle}
+                            selectedTextStyle={dropdownStyle.selectedTextStyle}
+                            inputSearchStyle={dropdownStyle.inputSearchStyle}
+                            iconStyle={dropdownStyle.iconStyle}
+                            itemTextStyle={dropdownStyle.itemText}
+                            containerStyle={dropdownStyle.containerDropdown}
+                            data={data}
+                            search
+                            maxHeight={300}
+                            labelField="label"
+                            valueField="value"
+                            placeholder="Narodowość"
+                            searchPlaceholder="Szukaj..."
+                            value={country}
+                            onChange={item => {
+                                setCountry(item);
+                            }}
+                        />
+                        <TextInput style={styles.textBox} placeholderTextColor={'#333'}
+                                placeholder='Imię'
+                                onChangeText={value => setName(value)}/>
+                        <TextInput style={styles.textBox} placeholderTextColor={'#333'}
+                                placeholder='Nazwisko'
+                                onChangeText={value => setSurname(value)}/>
+                        <TextInput style={styles.textBox} placeholderTextColor={'#333'}
+                                placeholder='Email'
+                                onChangeText={value => setEmail(value)}/>
+                        <TextInput style={styles.textBox} placeholderTextColor={'#333'}
+                                placeholder='Hasło'
+                                onChangeText={value => setPassword1(value)}/>
+                        <TextInput style={styles.textBox} placeholderTextColor={'#333'}
+                                placeholder='Powtórz hasło'
+                                onChangeText={value => setPassword2(value)}/>
+                        <View style={styles.sliderView}>
+                            <Text style={{ fontSize: 18, fontWeight: '400', color: '#ff2f00' }}>Rok urodzenia <Text style={{ fontWeight: '600', color:'#ff2f00' }}>{birthOfYear}</Text></Text>
+                            <Slider
+                                style={{width: '100%', height: 40}}
+                                onValueChange={year => setBirthOfYear(year)}
+                                value={birthOfYear}
+                                step={1}
+                                minimumValue={new Date().getFullYear() - 100}
+                                maximumValue={new Date().getFullYear()}
+                                minimumTrackTintColor="#ff2f00"
+                                maximumTrackTintColor="#000000"
+                                thumbImage={require('../../images/thumbSlider.png')}
+                            />
+                        </View>
+                        <TouchableOpacity style={styles.button} onPress={Register}>
+                            <Text style={styles.buttonText}>Zarejestruj</Text>
+                        </TouchableOpacity>
+                        <TouchableOpacity style={{ marginTop: 10 }} onPress={GoToLoginPage}>
+                            <Text style={styles.link}>Mam już konto</Text>
+                        </TouchableOpacity>
+                    </View>
+                </ImageBackground>
+            </ScrollView>
+        </SafeAreaView>
     );
 }
 
@@ -138,7 +144,7 @@ const styles = StyleSheet.create({
         display: 'flex',
         justifyContent: 'flex-start',
         alignItems: 'center',
-        height: '100%',
+        minHeight: Dimensions.get('window').height,
         width: '100%',
         backgroundColor: '#fff'
     },
@@ -272,6 +278,9 @@ const dropdownStyle = StyleSheet.create({
       inputSearchStyle: {
         height: 40,
         fontSize: 16,
+      },
+      itemText: {
+        color: '#333'
       }
 });
 

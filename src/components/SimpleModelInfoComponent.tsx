@@ -97,7 +97,8 @@ const styles = StyleSheet.create({
   details: {
     fontSize: 14,
     fontWeight: '600',
-    textAlign: 'left'
+    textAlign: 'left',
+    color: '#333'
   },
   stackContainer:{
     display: 'flex',

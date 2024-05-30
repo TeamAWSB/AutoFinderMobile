@@ -37,10 +37,10 @@ function LoginAccountPage({ navigation }: { navigation:any }){
             <Text style={styles.title}>Witaj ponownie!</Text>
         </View>
         <View style={styles.form}>
-            <TextInput style={styles.textBox}
+            <TextInput style={styles.textBox} placeholderTextColor={'#333'}
                        placeholder='Login'
                        onChangeText={email => setEmail(email)}/>
-            <TextInput style={styles.textBox}
+            <TextInput style={styles.textBox} placeholderTextColor={'#333'}
                        placeholder='Hasło'
                        onChangeText={password => setPassword(password)}/>
             <TouchableOpacity style={styles.button} onPress={() => ToLogin(false)}>

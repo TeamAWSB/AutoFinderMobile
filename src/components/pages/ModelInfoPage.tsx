@@ -37,7 +37,6 @@ function ModelInfoPage({ navigation }: { navigation:any } ) {
 
     const getStatusLikeCurrentGenerationModel = async (model:any) => {
       let user = await SessionApp.Get();
-      console.warn(user.login);
 
       const likedVehicles: any[] = await Api.GetLikedVehicles(user?.userId);
 
